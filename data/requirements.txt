@@ -1,0 +1,6 @@
+# Data acquisition (any one source is enough)
+dukascopy-python>=4.0.1   # default: free, headless, deep EUR/USD H1 history
+yfinance>=0.2.40          # fallback: easy but ~730-day hourly cap, indicative quotes
+# MetaTrader5>=5.0.4500   # best if you have the terminal (see 03_mt5/) — Windows only
+pandas>=2.2
+numpy>=1.26
