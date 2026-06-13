@@ -1,0 +1,4 @@
+engine,total_return_pct,sharpe,max_drawdown_pct,n_trades,final_equity,ann_factor
+vectorbt,-0.0536,-0.0469,-0.6565,484,99946.4,6048
+nautilus,-0.134,-0.1211,-0.7249,484,99865.96,6048
+mt5_python,-0.0536,-0.0469,-0.6565,484,99946.4,6048
