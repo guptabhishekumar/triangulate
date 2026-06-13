@@ -1,24 +1,57 @@
-# Virtual environments (one per framework — see README)
+# ── Virtual environments (one per framework — see README) ───────────────
 .venv*/
 venv/
 env/
+ENV/
+.python-version
 
-# Python
+# ── Python ──────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
+*$py.class
 *.egg-info/
+.eggs/
+build/
+dist/
 .pytest_cache/
-.ipynb_checkpoints/
 .mypy_cache/
 .ruff_cache/
+.ipynb_checkpoints/
 
-# OS / editor
+# ── Test / coverage artifacts ───────────────────────────────────────────
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# ── Secrets / local config ──────────────────────────────────────────────
+.env
+.env.*
+*.local
+
+# ── Logs & temp ─────────────────────────────────────────────────────────
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+
+# ── OS / editor ─────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
 .idea/
 .vscode/
 
-# MetaTrader 5 compiled EA (recompile from the .mq5 source)
+# ── MetaTrader 5 ────────────────────────────────────────────────────────
+# Compiled EA (recompile from the .mq5 source) and tester scratch files.
 *.ex5
+*.opt
+tester/
 
-# NOTE: data/eurusd_h1.csv IS committed on purpose (reproducibility).
+# ── Deliberately TRACKED (do NOT ignore) ────────────────────────────────
+# data/eurusd_h1.csv   — canonical dataset, committed for reproducibility
+# results/*.csv, *.md  — reconciled metrics + analysis
+# results/mt5_report.png — add after running the Strategy Tester (a deliverable)
