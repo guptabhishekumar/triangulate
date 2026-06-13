@@ -54,23 +54,43 @@ signal = EMA(MACD, 9)
 EMA[t] = α·price[t] + (1−α)·EMA[t−1],   α = 2/(period+1),   EMA[0] = price[0]
 ```
 
-Long on a bullish cross, flat on a bearish cross; signal read on a **closed** bar
-and filled at the **next bar's open** (no look-ahead); no trades in the first 35
-(= 26 + 9) warm-up bars.
+Two EMAs of price (fast and slow), their difference, a third EMA that smooths it,
+and a crossover detector:
 
 ```mermaid
-flowchart TD
-    A[New closed bar] --> B[Update EMA12 and EMA26]
-    B --> C["MACD = EMA12 − EMA26"]
-    C --> D["signal = EMA9(MACD)"]
-    D --> E{"MACD crosses ABOVE signal?"}
-    E -- "yes and flat" --> BUY["BUY at next bar open"]
-    E -- no --> F{"MACD crosses BELOW signal?"}
-    F -- "yes and long" --> SELL["CLOSE at next bar open"]
-    F -- no --> W[hold]
-    BUY --> Z[record equity]
-    SELL --> Z
-    W --> Z
+flowchart LR
+    P([close]) --> F["EMA-12 · fast"]
+    P --> S["EMA-26 · slow"]
+    F --> SUB(("−"))
+    S --> SUB
+    SUB --> M["MACD line"]
+    M --> N["EMA-9"]
+    N --> SG["signal line"]
+    M --> XO{{crossover}}
+    SG --> XO
+    XO --> EX["entries / exits"]
+```
+
+Long on a bullish cross, flat on a bearish cross; the signal is read on a
+**closed** bar and filled at the **next bar's open** (no look-ahead); no trades in
+the first 35 (= 26 + 9) warm-up bars.
+
+```mermaid
+flowchart LR
+    A([Closed bar]) --> B["EMA12, EMA26"] --> C["MACD = EMA12 − EMA26"] --> D["signal = EMA9(MACD)"] --> E{Crossover?}
+    E -- "above & flat" --> BUY([BUY at next open])
+    E -- "below & long" --> SELL([CLOSE at next open])
+    E -- none --> H([hold])
+```
+
+The position is always either flat or long:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Flat
+    Flat --> Long: MACD crosses ABOVE signal
+    Long --> Flat: MACD crosses BELOW signal
+    Long --> [*]: end of data (force close)
 ```
 
 ## Architecture
@@ -102,6 +122,24 @@ Same logic, three execution models:
 | **vectorbt** | vectorised (whole array) | batch over the array | shift signals +1, fill at open |
 | **Nautilus** | event-driven (bar-by-bar) | incremental in `on_bar` | market order → next bar |
 | **MetaTrader 5** | platform / `OnTick` | incremental on new bar | `CTrade.Buy` → next-bar open |
+
+All three share the same look-ahead-free timing — decide on a closed bar, fill on
+the next bar's open:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant D as Data feed
+    participant S as Strategy
+    participant X as Exchange
+    D->>S: bar t closes (OHLC final)
+    S->>S: update MACD, detect cross
+    S->>X: submit market order
+    Note over S,X: order rests — no same-bar fill
+    D->>X: bar t+1 opens
+    X-->>S: fill at bar t+1 OPEN
+    Note over D,X: closed-bar signal → next-open fill (look-ahead-free)
+```
 
 ## Repository layout
 
