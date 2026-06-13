@@ -1,0 +1,7 @@
+# MetaTrader 5 leg (Python API) — Windows only, Python 3.10–3.13
+# Needs the MT5 desktop terminal installed + running + logged into a (demo)
+# account for live data export. The Python-API backtest (run.py) falls back to
+# the committed CSV, so it also runs without the terminal.
+MetaTrader5>=5.0.4500
+pandas>=2.2
+numpy>=1.26
