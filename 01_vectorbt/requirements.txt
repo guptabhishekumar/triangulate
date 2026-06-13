@@ -1,0 +1,7 @@
+# vectorbt leg — Python 3.12
+# (open-source vectorbt 1.0.0 is the community edition of VectorBT PRO; it
+#  supports numpy 2.x / numba >= 0.60, so a numpy-1.x split is NOT needed.)
+vectorbt==1.0.0
+pandas>=2.2,<3.0
+numpy>=1.26
+pytest>=8.0          # for the shared test-suite
