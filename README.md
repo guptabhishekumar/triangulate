@@ -59,16 +59,25 @@ and a crossover detector:
 
 ```mermaid
 flowchart LR
-    P([close]) --> F["EMA-12 · fast"]
-    P --> S["EMA-26 · slow"]
-    F --> SUB(("−"))
-    S --> SUB
-    SUB --> M["MACD line"]
-    M --> N["EMA-9"]
-    N --> SG["signal line"]
-    M --> XO{{crossover}}
-    SG --> XO
-    XO --> EX["entries / exits"]
+    P["close price"]:::in
+    F["EMA-12 · fast"]:::ema
+    S["EMA-26 · slow"]:::ema
+    D["MACD = fast − slow"]:::macd
+    G["signal = EMA-9(MACD)"]:::macd
+    X{"cross?"}:::dec
+    O["entries / exits"]:::out
+    P --> F & S
+    F --> D
+    S --> D
+    D --> G
+    D --> X
+    G --> X
+    X --> O
+    classDef in fill:#eef2ff,stroke:#6366f1,color:#1e1b4b;
+    classDef ema fill:#ecfdf5,stroke:#10b981,color:#064e3b;
+    classDef macd fill:#fff7ed,stroke:#f59e0b,color:#7c2d12;
+    classDef dec fill:#fef2f2,stroke:#ef4444,color:#7f1d1d;
+    classDef out fill:#faf5ff,stroke:#a855f7,color:#581c87;
 ```
 
 Long on a bullish cross, flat on a bearish cross; the signal is read on a
@@ -100,19 +109,20 @@ shared by all three legs, fed by one canonical dataset.
 
 ```mermaid
 flowchart LR
-    SRC["Data source<br/>Dukascopy · MT5 · yfinance"] --> CSV[("eurusd_h1.csv<br/>canonical")]
-    CSV --> CORE
-    subgraph CORE["shared/ · hand-written, reused"]
-      direction LR
-      IND[indicators] --> SIG[signals] --> MET[metrics]
-    end
-    CORE --> V["01 · vectorbt"]
-    CORE --> N["02 · Nautilus"]
-    CORE --> M["03 · MetaTrader 5"]
-    V --> R[("metrics.csv")]
-    N --> R
-    M --> R
-    R --> CMP["compare.py → table + analysis"]
+    SRC["Data source<br/>Dukascopy · MT5 · yfinance"]:::src
+    CSV[("eurusd_h1.csv<br/>canonical")]:::data
+    CORE["shared/ core<br/>EMA · MACD · signals · metrics<br/>(hand-written)"]:::core
+    V["vectorbt"]:::eng
+    N["Nautilus"]:::eng
+    M["MetaTrader 5"]:::eng
+    OUT[("results +<br/>comparison")]:::data
+    SRC --> CSV --> CORE
+    CORE --> V & N & M
+    V & N & M --> OUT
+    classDef src fill:#eef2ff,stroke:#6366f1,color:#1e1b4b;
+    classDef data fill:#ecfdf5,stroke:#10b981,color:#064e3b;
+    classDef core fill:#fff7ed,stroke:#f59e0b,color:#7c2d12;
+    classDef eng fill:#faf5ff,stroke:#a855f7,color:#581c87;
 ```
 
 Same logic, three execution models:
