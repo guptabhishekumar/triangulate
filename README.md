@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/vectorbt-1.0.0-1f77b4?style=flat-square" alt="vectorbt" height="20">
   <img src="https://img.shields.io/badge/Nautilus_Trader-1.228-6f42c1?style=flat-square" alt="Nautilus Trader" height="20">
   <img src="https://img.shields.io/badge/MetaTrader_5-MQL5-eaa000?style=flat-square" alt="MetaTrader 5" height="20">
-  <img src="https://img.shields.io/badge/tests-18_passing-2ea44f?style=flat-square" alt="tests" height="20">
+  <a href="https://github.com/guptabhishekumar/triangulate/actions/workflows/ci.yml"><img src="https://github.com/guptabhishekumar/triangulate/actions/workflows/ci.yml/badge.svg" alt="CI" height="20"></a>
 </p>
 
 > The **same** MACD-crossover strategy — with **hand-written** indicator maths —
