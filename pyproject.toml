@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "triangulate"
+version = "1.0.0"
+description = "One MACD-crossover strategy backtested across vectorbt, Nautilus Trader, and MetaTrader 5, with hand-written indicators and reconciled metrics."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+authors = [{ name = "Abhishek Kumar Gupta", email = "guptabhishekumar@gmail.com" }]
+keywords = ["backtesting", "macd", "vectorbt", "nautilus-trader", "metatrader5", "quant"]
+
+# The shared, framework-agnostic core. Each engine leg (01_*/02_*/03_*) also
+# installs its own framework into a separate virtual environment — see the per-leg
+# requirements.txt files and the README.
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.urls]
+Repository = "https://github.com/guptabhishekumar/triangulate"
+
+[tool.setuptools]
+packages = ["shared"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
