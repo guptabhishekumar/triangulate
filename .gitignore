@@ -29,6 +29,9 @@ coverage.xml
 .env.*
 *.local
 
+# ── Local-only docs / scratch (not part of the deliverable) ─────────────
+docs/
+
 # ── Logs & temp ─────────────────────────────────────────────────────────
 *.log
 *.tmp
